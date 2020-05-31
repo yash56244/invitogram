@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% block content%}
+{% block css %}
+<link rel="stylesheet" href="../static/css/home.css">
+{% endblock css %}
+<div class="container">
+    <h1>Choose your event</h1>
+    <div class="grid-container">
+        <div class="grid-item"><center><img src="../static/img/birthday.jpg" alt="" id="birthday"><br><br>Birthday!</center></div>
+        <div class="grid-item"><center><img src="../static/img/wedding.jfif" alt="" id="wedding"><br><br>Wedding!</center></div>
+        <div class="grid-item"><center><img src="../static/img/other.jpg" alt="" id="other"><br><br>Others</center></div>
+    </div>
+</div>
+
+<div id="birthdayModal" class="modal">
+    <div class="modal-content">
+        <form action="" method="post" class="modalform"><center>
+            <h2>Birthday Details</h2>
+            {{ bform.hidden_tag() }}
+            {{ bform.name.label }} <br>
+            {{ bform.name }} <br>
+            {{ bform.birthday_no.label }} <br>
+            {{ bform.birthday_no }} <br>
+            {{ bform.date }}{{ bform.time }} <br>
+            {{ bform.host_name.label }} <br>
+            {{ bform.host_name }} <br>
+            {{ bform.details.label }} <br>
+            {{ bform.details }} <br>
+            Send To.. <br>
+            <select name="user" id="" multiple required>
+                {% for i in range(accounts) %}
+                    <option value="{{ users[i].name }}">{{ users[i].name }}</option>
+                {% endfor %}
+            </select><br>
+            <!-- <small>Press <kbd style="background-color: grey;">Ctrl</kbd> to select multiple users.</small> -->
+            <br><hr>
+            {{ bform.submit(class="event_submit") }}</center>
+        </form>
+    </div>
+</div>
+<div id="weddingModal" class="modal">
+    <div class="modal-content">
+        <form action="" method="post" class="modalform"><center>
+            <h2>Wedding Details</h2>
+            {{ wform.hidden_tag() }}
+            {{ wform.bride.label }} <br>
+            {{ wform.bride }} <br>
+            {{ wform.groom.label }} <br>
+            {{ wform.groom }} <br>
+            {{ wform.date }}{{ wform.time }} <br>
+            {{ wform.host_name.label }} <br>
+            {{ wform.host_name }} <br>
+            {{ wform.details.label }} <br>
+            {{ wform.details }} <br>
+            Send To.. <br>
+            <select name="user" id="" multiple>
+                {% for i in range(accounts) %}
+                    <option value="{{ users[i].name }}">{{ users[i].name }}</option>
+                {% endfor %}
+            </select><br>
+            <!-- <small>Press <kbd style="background-color: grey;">Ctrl</kbd> to select multiple users.</small> -->
+            <br><hr>
+            {{ wform.submit(class="event_submit") }}</center>
+        </form>
+    </div>
+</div>
+<div id="otherModal" class="modal">
+    <div class="modal-content">
+        <form action="" method="post" class="modalform"><center>
+            <h2>Event Details</h2>
+            {{ oform.hidden_tag() }}
+            {{ oform.event_name.label }} <br>
+            {{ oform.event_name }} <br>
+            {{ oform.date.label }} <br>
+            {{ oform.date }}{{ oform.time }} <br>
+            {{ oform.host_name.label }} <br>
+            {{ oform.host_name }} <br>
+            {{ oform.details.label }} <br>
+            {{ oform.details }} <br>
+            Send To.. <br>
+            <select name="user" id="" multiple>
+                {% for i in range(accounts) %}
+                    <option value="{{ users[i].name }}">{{ users[i].name }}</option>
+                {% endfor %}
+            </select><br>
+            <!-- <small>Press <kbd style="background-color: grey;">Ctrl</kbd> to select multiple users.</small> -->
+            <br><hr>
+            {{ oform.submit(class="event_submit") }}</center>
+        </form>
+    </div>
+</div>
+{% block js %}
+<script src="../static/js/home.js"></script>
+{% endblock js%}
+{% endblock content %}

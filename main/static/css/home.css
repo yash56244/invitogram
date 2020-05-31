@@ -1,0 +1,104 @@
+.container{
+    padding: 100px 100px ;
+}
+h1{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+}
+.grid-container{
+    position: relative;
+    top: 150px;
+    display: grid;
+    grid-template-columns: repeat(3,auto);
+}
+
+#birthday, #wedding, #other{
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.5s;
+}
+#birthday:hover, #wedding:hover, #other:hover{
+    transform: scale(1.25);
+}
+
+@media(max-width: 800px){
+    .grid-container{
+        grid-template-columns: repeat(2,auto);
+    }
+    #other{
+        position: relative;
+        left: 50%;
+    }
+}
+@media(max-width: 600px){
+    .container{
+        padding: 100px 0px;
+    }
+    #birthday:hover, #wedding:hover, #other:hover{
+        transform: scale(1.05);
+    }
+}
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    padding-top: 100px; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto;
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .modal-content {
+      position: relative;
+    margin: auto;
+    padding: 20px;
+    width: 80%;
+    animation: top 0.5s ease-out;
+  }
+  .modalform{
+    background-color: #2196F3;
+    box-shadow: 3px 3px 5px 0;
+    padding: 10px 100px;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%);
+      font-size: large;
+  }
+  .event_submit{
+      font-size: 25px;
+      background-color: #FF5252;
+      padding: 5px 5px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.5s;
+      outline: none;
+  }
+  .event_submit:hover{
+      transform: scale(1.1);
+      background-color: #FFEB3B;
+  }
+  #list{
+      list-style: none;
+  }
+  #list li{
+      float: left;
+  }
+  @keyframes top {
+      from{
+          top: -400px;
+          opacity: 0;
+      }
+      to{
+          top: 0px;
+          opacity: 1;
+      }
+  }

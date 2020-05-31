@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+{% block css %}
+<link rel="stylesheet" href="../static/css/login.css">
+{% endblock css %}
+<form action="" method="post" class="form">
+{{ form.hidden_tag() }}
+<h1>Welcome</h1>
+{{ form.email(class="user", placeholder="E-Mail") }}
+{% if form.email.errors %}
+{% for error in form.email.errors %}
+<br>
+<span><small style="color: red;">{{ error }}</small></span>
+{% endfor %}
+{% endif %}
+<br><br>
+{{ form.password(class="pass", placeholder="Password") }}
+{% if form.email.errors %}
+{% for error in form.password.errors %}
+<br>
+<span><small style="color: red;">{{ error }}</small></span>
+{% endfor %}
+{% endif %}
+<br><br>
+{{ form.remember }}
+{{ form.remember.label }}
+<br><br>
+{{ form.submit(class="btn") }}
+<p>Don't have an account?<a href="{{ url_for('register') }}" id="link">Sign Up</a></p>
+</form>
+{% endblock content %}

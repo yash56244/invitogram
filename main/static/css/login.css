@@ -1,0 +1,77 @@
+.form{
+    text-align: center;
+    padding: 10px 10px;
+    position: absolute;
+    width: 320px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    font-size: larger;
+    font-family: cursive;
+    animation: login 1s ease-in-out;
+    box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, .3);
+}
+@keyframes login {
+    0% {
+        top: -50%;
+    }
+    90%{
+        top: 60%;
+    }
+    100%{
+        top: 50%;
+    }
+}
+h1{
+    font-size: 50px;
+    color: green;
+}
+h2{
+    font-size: 40px;
+    color: green;
+}
+.user,.pass,.email{
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    border: 2px solid #2ecc71;
+    transition: 0.25s;
+    border-radius: 20px;
+    background-color: black;
+    background: none;
+    outline: none;
+}
+.user:focus,.pass:focus,.email:focus{
+    width: 300px;
+    border-radius: 20px;
+    border: 2px solid orangered;
+}
+.btn{
+    height: 40px;
+    width: 100px;
+    cursor: pointer;
+    font-size: large;
+    background-color: black;
+    border: 2px solid greenyellow;
+    color: white;
+    transition: 0.25s;
+    border-radius: 20px;
+    outline: none;
+}
+.btn:hover{
+    background-color: #2ecc71;
+}
+#link:link{
+    text-decoration: none;
+    color: #2ecc71;
+}
+#link:visited{
+    text-decoration: none;
+    color: #2ecc71;
+}
+#link:hover{
+    text-decoration: underline;
+}
+#link:active{
+    text-decoration: underline;
+}

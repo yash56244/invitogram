@@ -1,0 +1,102 @@
+.tab{
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%);
+}
+.tab button{
+    padding: 10px 10px;
+    font-size: 25px;
+    background-color: #FF5722;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 10px;
+}
+.tab button:hover{
+    background-color: orange;
+}
+.tab button.active{
+    background-color: orange;
+}
+.tabContent{
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%);
+    animation: fade 1s;
+}
+@keyframes fade{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+.grid-item1{
+    transition: 0.3s;
+    padding: 20px 100px;
+    margin-bottom: 30px;
+    color: white;
+    background-color: #512DA8;
+}
+.grid-item1:hover{
+    transform: scale(1.2);
+    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.5);
+}
+.grid-item2{
+    padding: 20px 100px;
+    margin-bottom: 30px;
+    color: white;
+    background-color: #512DA8;
+}
+.grid-item3{
+    background-color: #03A9F4;
+    padding: 40px 80px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    font-size: 20px;
+}
+#heading{
+    font-size: 30px;
+    position: relative;
+    padding: 10px 10px;
+    color: white;
+    background-color: #009688;
+    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.5);
+    letter-spacing: 5px;
+}
+.current-page{
+    width: 30px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    color: white;
+    font-size: 30px;
+    background-color: green;
+    outline: none;
+    border: none;
+}
+.current-page:hover{
+    opacity: 0.8;
+}
+.other-page{
+    width: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    outline: none;
+    font-size: 30px;
+    background-color: white;
+    border: none;
+}
+.other-page:hover{
+    opacity: 0.8;
+}
+@media(max-width: 500px){
+    .grid-item:hover{
+        transform: scale(1.1);
+    }
+}

@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+{% block content %}
+{% block css %}
+<link rel="stylesheet" href="../static/css/dashboard.css">
+{% endblock css %}
+<div class="tab">
+    <button class="tablink" onclick="openTab(event, 'Sent')" id="default">Sent</button>
+    <button class="tablink" onclick="openTab(event, 'Received')">Received</button>
+    <button class="tablink" onclick="openTab(event, 'Notification')">Notifications</button>
+</div>
+<div id="Sent" class="tabContent">
+    <div class="grid-container">
+        {% for invite in invites_sent.items %} 
+        <div class="grid-item1">
+            <center><span id="heading"> {{ invite.heading }} <br></span>
+            {% if invite.heading == "Birthday Party" %}
+                <img src="../static/img/birthday1.jpg" alt="" style="width: 200px; height: 200px;"> <br>
+            {% elif invite.heading == "Wedding Ceremony" %}
+                <img src="../static/img/wedding1.jpg" alt="" style="width: 200px; height: 200px;"> <br>
+            {% else %}
+                <img src="../static/img/other1.jpg" alt="" style="width: 200px; height: 200px;"> <br>
+            {% endif %}
+            {{ invite.paragraph }} <br>
+            On-{{ invite.date_time }} <br>
+            Created : {{ invite.time }} <br>
+            Hosted By : {{ invite.host_name }} <br>
+            Details : {{ invite.details }} <br> <br>
+        </div>
+        {% endfor %}
+    </div>
+<hr>
+{% for page_num in invites_sent.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+    {% if page_num %}
+        {% if invites_sent.page == page_num %}
+            <a href="{{ url_for('dashboard', page1=page_num) }}"><button class="current-page">{{ page_num }}</button></a>
+        {% else %}
+            <a href="{{ url_for('dashboard', page1=page_num) }}"><button class="other-page">{{ page_num }}</button></a>
+        {% endif %}
+    {% else %}
+    ...
+    {% endif %}
+{% endfor %}
+</div>
+<div id="Received" class="tabContent">
+    <div class="grid-container">
+        {% for invite in invites_received.items %}
+            <div class="grid-item2">
+                <center><span id="heading"> {{ invite.heading }} <br></span>
+                {% if invite.heading == "Birthday Party" %}
+                    <img src="../static/img/birthday1.jpg" alt="" style="width: 200px; height: 200px;"> <br>
+                {% elif invite.heading == "Wedding Ceremony" %}
+                    <img src="../static/img/wedding1.jpg" alt="" style="width: 200px; height: 200px;"> <br>
+                {% else %}
+                    <img src="../static/img/other1.jpg" alt="" style="width: 200px; height: 200px;"> <br>
+                {% endif %}
+                {{ invite.paragraph }} <br>
+                On-{{ invite.date_time }} <br>
+                Created : {{ invite.time }} <br>
+                Hosted By : {{ invite.host_name }} <br>
+                Details : {{ invite.details }} <br> <br>
+                <div class="aor">
+                    <center>
+                        {% if invite.accepted %}
+                            <p>You have accepted this invite.</p>
+                        {% elif invite.rejected %}
+                            <p>You have rejected this invite.</p>
+                        {% else %} 
+                            <form action="" method="post">
+                                {{ aform.hidden_tag() }}
+                                {{ aform.submit }}
+                            </form>
+                            <form action="" method="post">
+                                {{ rform.hidden_tag() }}
+                                {{ rform.submit }}
+                            </form>
+                        {% endif %}                            
+                    </center>
+                </div>
+                <p id="info" style="display: none;"></p>
+            </div>
+        {% endfor %}
+    </div>
+<hr>
+{% for page_num in invites_received.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+    {% if page_num %}
+        {% if invites_received.page == page_num %}
+            <a href="{{ url_for('dashboard', page2=page_num) }}"><button class="current-page">{{ page_num }}</button></a>
+        {% else %}
+            <a href="{{ url_for('dashboard', page2=page_num) }}"><button class="other-page">{{ page_num }}</button></a>
+        {% endif %}
+    {% else %}
+    ...
+    {% endif %}
+{% endfor %}
+</div>
+
+<div id="Notification" class="tabContent">
+    <div class="grid-container">
+        {% for notification in notification_received %}
+        <center>
+            <div class="grid-item3">
+                {{ notification.message }}
+            </div>
+        </center>
+        {% endfor %}
+    </div>
+</div>
+
+{% block js %}
+<script src="../static/js/dashboard.js"></script>
+{% endblock js %}
+{% endblock content %}
