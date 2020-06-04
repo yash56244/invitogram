@@ -1,9 +1,10 @@
-from main import app, db, bcrypt
+from main import app, db, bcrypt, mail
 from flask import redirect, render_template, url_for, request, flash, session
 from main.models import User, Invite, Notification
-from main.forms import LoginForm, RegistrationForm, BirthdayForm, WeddingForm, OtherForm, UpdateAccount, AcceptForm, RejectForm
+from main.forms import LoginForm, RegistrationForm, BirthdayForm, WeddingForm, OtherForm, UpdateAccount
 from flask_login import current_user, login_user, logout_user, login_required
-from datetime import datetime
+from datetime import datetime, date
+from flask_mail import Message
 
 @app.route('/', methods=['GET', 'POST'])
 @login_required
@@ -35,8 +36,14 @@ def home():
 
 def send_invite(recipient, form, paragraph, heading):
     user = User.query.filter_by(name=recipient).first_or_404()
-    date_time = str(form.date.data) + " " +str(form.time.data) 
-    invite = Invite(author=current_user,recipient=user,details=form.details.data, paragraph=paragraph, date_time=date_time, host_name=form.host_name.data, heading=heading)
+    date_time = str(form.date1.data) + " " +str(form.time.data) 
+    deadline = str(form.date2.data)
+    invite = Invite(author=current_user,recipient=user,details=form.details.data, paragraph=paragraph, date_time=date_time, host_name=form.host_name.data, heading=heading, deadline=str(deadline))
+    msg = Message('{} from {}'.format(heading, current_user),
+        sender='noreply@google.com',
+        recipients=[user.email])
+    msg.body = "You have received a invitation from {}.The details of the event: {}.The event is hosted by {}. Please do join us. Thanks.".format(current_user.name, form.details.data, form.host_name.data)
+    mail.send(msg)
     db.session.add(invite)
     db.session.commit()
     flash('Invite sent succesfully')
@@ -81,8 +88,6 @@ def logout():
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    aform = AcceptForm(request.form)
-    rform = RejectForm(request.form)
     page1 = request.args.get('page1', 1, type=int)
     page2 = request.args.get('page2', 1, type=int)
     current_user.last_invite_seen_time = datetime.utcnow()
@@ -90,36 +95,45 @@ def dashboard():
     db.session.commit()
     invites_sent = current_user.invites_sent.order_by(Invite.time.desc()).paginate(page=page1, per_page=3)
     invites_received = current_user.invites_received.order_by(Invite.time.desc()).paginate(page=page2, per_page=3)
-    notification_sent = current_user.notifications_sent.order_by(Notification.time.desc())
     notification_received = current_user.notifications_received.order_by(Notification.time.desc())
 
-    if rform.validate_on_submit() and request.method == 'POST':
-        recipient = current_user.invites_received.order_by(Invite.time.desc())[0].sender_id
-        id1 = current_user.invites_received.order_by(Invite.time.desc())[0].id
-        message = "{} rejected your Invitation.".format(current_user.name)
-        rejected = False
-        send_notification(recipient, message, rejected, id1)
+    return render_template('dashboard.html', title="Dashboard", invites_sent=invites_sent, invites_received=invites_received, notification_received=notification_received, date=str(date.today()))
 
-    if aform.validate_on_submit() and request.method == 'POST':
-        recipient = current_user.invites_received.order_by(Invite.time.desc())[0].sender_id
-        id1 = current_user.invites_received.order_by(Invite.time.desc())[0].id
-        message = "{} accepted your Invitation.".format(current_user.name)
-        accepted = True
-        send_notification(recipient, message, accepted, id1)
-
-    return render_template('dashboard.html', title="Dashboard", invites_sent=invites_sent, invites_received=invites_received, notification_sent=notification_sent, notification_received=notification_received, aform=aform, rform=rform)
-
-def send_notification(recipient, message, bool1, id1):
-    user = User.query.filter_by(id=recipient).first_or_404()
-    invite = Invite.query.filter_by(id=id1).first()
-    if bool1:
+@app.route('/action/<int:invite_id>/<action>', methods=['POST', 'GET'])
+@login_required
+def action(invite_id, action):
+    invite = Invite.query.filter_by(id=invite_id).first_or_404()
+    user = User.query.filter_by(id=invite.sender_id).first_or_404()
+    if request.method == 'POST' and action == 'userResponse':
+        response = request.form.get('userResponse')
+        message = "{} has sent you a message regarding your invite \"{}\". Message: \"{}\" ".format(current_user.name, invite.heading, response)
+        notification = Notification(author=current_user, receiver = user, message=message, type="userResponse")
+        db.session.add(notification)
+        db.session.commit()
+        flash('Your response has been sent successfully.')
+    if request.method == 'POST' and action == 'authorResponse':
+        notif = Notification.query.filter_by(id=invite_id).first_or_404()
+        usern = User.query.filter_by(id=notif.senderId).first_or_404()
+        response = request.form.get('authorResponse')
+        message = "{} has sent you a message regarding your response. Message: \"{}\" ".format(current_user.name, response)
+        notification = Notification(author=current_user, receiver = usern, message=message, type="authorResponse")
+        db.session.add(notification)
+        db.session.commit()
+    if action == 'accept':
+        message = "{} has accepted your invitation\n Heading:{}.  \n Details:{}".format(current_user.name, invite.heading, invite.details)
         invite.accepted=True
-    else:
+        notification = Notification(author=current_user, receiver = user, message=message, type="accept")
+        db.session.add(notification)
+        current_user.accept_invite(invite)
+        db.session.commit()
+    if action == 'reject':
+        message = "{} has rejected your invitation. Heading:{} Details:{}".format(current_user.name, invite.heading, invite.details)
         invite.rejected=True
-    notification = Notification(author=current_user, receiver=user, message=message)
-    db.session.add(notification)
-    db.session.commit()
-    return redirect(url_for('home'))
+        notification = Notification(author=current_user, receiver = user, message=message, type="reject")
+        db.session.add(notification)
+        current_user.reject_invite(invite)
+        db.session.commit()
+    return redirect(request.referrer)
 
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
