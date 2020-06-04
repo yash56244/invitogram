@@ -3,6 +3,7 @@
 {% block css %}
 <link rel="stylesheet" href="../static/css/home.css">
 {% endblock css %}
+
 <div class="container">
     <h1>Choose your event</h1>
     <div class="grid-container">
@@ -21,7 +22,9 @@
             {{ bform.name }} <br>
             {{ bform.birthday_no.label }} <br>
             {{ bform.birthday_no }} <br>
-            {{ bform.date }}{{ bform.time }} <br>
+            {{ bform.date1 }}{{ bform.time }} <br>
+            <small style="color: orange;">Make sure you set date and time properly.</small><br>
+            {{ bform.date2.label }} {{ bform.date2 }} <br>
             {{ bform.host_name.label }} <br>
             {{ bform.host_name }} <br>
             {{ bform.details.label }} <br>
@@ -47,7 +50,9 @@
             {{ wform.bride }} <br>
             {{ wform.groom.label }} <br>
             {{ wform.groom }} <br>
-            {{ wform.date }}{{ wform.time }} <br>
+            {{ wform.date1 }}{{ wform.time }} <br>
+            <small style="color: orange;">Make sure you set date and time properly.</small><br>
+            {{ bform.date2.label }} {{ bform.date2 }} <br>
             {{ wform.host_name.label }} <br>
             {{ wform.host_name }} <br>
             {{ wform.details.label }} <br>
@@ -71,8 +76,10 @@
             {{ oform.hidden_tag() }}
             {{ oform.event_name.label }} <br>
             {{ oform.event_name }} <br>
-            {{ oform.date.label }} <br>
-            {{ oform.date }}{{ oform.time }} <br>
+            {{ oform.date1.label }} <br>
+            {{ oform.date1 }}{{ oform.time }} <br>
+            <small style="color: orange;">Make sure you set date and time properly.</small><br>
+            {{ bform.date2.label }} {{ bform.date2 }} <br>
             {{ oform.host_name.label }} <br>
             {{ oform.host_name }} <br>
             {{ oform.details.label }} <br>
