@@ -18,6 +18,7 @@ class User(db.Model, UserMixin):
     notifications_sent = db.relationship('Notification', foreign_keys="Notification.senderId", backref='author', lazy='dynamic')
     notifications_received = db.relationship('Notification', foreign_keys="Notification.receiverId", backref='receiver', lazy='dynamic')
     last_notification_seen_time = db.Column(db.DateTime)
+    action = db.relationship('Action', foreign_keys='Action.user_id', backref='user', lazy='dynamic')
 
     def __repr__(self):
         return "User('{}', '{}')".format(self.name, self.email)
@@ -29,6 +30,17 @@ class User(db.Model, UserMixin):
     def new_notifications(self):
         last_read_time = self.last_notification_seen_time or datetime(1900,1,1)
         return Notification.query.filter_by(receiver=self).filter(Notification.time > last_read_time).count()
+    
+    def accept_invite(self, invite):
+        accept = Action(user_id=self.id, invite_id=invite.id)
+        db.session.add(accept)
+    
+    def reject_invite(self, invite):
+        reject = Action(user_id=self.id, invite_id=invite.id)
+        db.session.add(reject)
+    
+    def has_taken_action(self, invite):
+        return Action.query.filter(Action.user_id == self.id, Action.invite_id == invite.id).count() > 0
 
 class Invite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -36,11 +48,13 @@ class Invite(db.Model):
     recipient_id=db.Column(db.Integer, db.ForeignKey('user.id'))
     heading=db.Column(db.String())
     date_time=db.Column(db.String())
+    deadline=db.Column(db.String())
     host_name=db.Column(db.String())
     paragraph=db.Column(db.String())
     details = db.Column(db.String())
     accepted = db.Column(db.Boolean())
     rejected = db.Column(db.Boolean())
+    aor = db.relationship('Action', backref='invite', lazy='dynamic')
     time = db.Column(db.Date, index=True, default=datetime.utcnow())
 
     def __repr__(self):
@@ -52,6 +66,13 @@ class Notification(db.Model):
     receiverId = db.Column(db.Integer, db.ForeignKey('user.id'))
     message = db.Column(db.String())
     time = db.Column(db.DateTime, index=True, default=datetime.utcnow())
+    type = db.Column(db.String)
 
     def __repr__(self):
         return 'Notification {}'.format(self.message)
+
+class Action(db.Model):
+    __tablename__ = 'action'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    invite_id = db.Column(db.Integer, db.ForeignKey('invite.id'))
