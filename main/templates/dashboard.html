@@ -25,6 +25,8 @@
             Created : {{ invite.time }} <br>
             Hosted By : {{ invite.host_name }} <br>
             Details : {{ invite.details }} <br> <br>
+            Deadline: {{ invite.deadline }} <br>
+            </center>
         </div>
         {% endfor %}
     </div>
@@ -58,25 +60,32 @@
                 Created : {{ invite.time }} <br>
                 Hosted By : {{ invite.host_name }} <br>
                 Details : {{ invite.details }} <br> <br>
+                Accept Before: {{ invite.deadline }} <br>
+                <div class="user-response">
+                    <form action="{{ url_for('action', invite_id=invite.id, action='userResponse') }}" method="post">
+                        <textarea name="userResponse" placeholder="User Response" id="" cols="30" rows="8" style="outline: none;"></textarea><br>
+                        <input type="submit" value="Send" class="action" style="color: white;">
+                    </form>
+                </div>
                 <div class="aor">
                     <center>
-                        {% if invite.accepted %}
-                            <p>You have accepted this invite.</p>
-                        {% elif invite.rejected %}
-                            <p>You have rejected this invite.</p>
-                        {% else %} 
-                            <form action="" method="post">
-                                {{ aform.hidden_tag() }}
-                                {{ aform.submit }}
-                            </form>
-                            <form action="" method="post">
-                                {{ rform.hidden_tag() }}
-                                {{ rform.submit }}
-                            </form>
-                        {% endif %}                            
+                        {% if date > invite.deadline|string %}
+                            <p>Sorry, you can't accept this invitation now. It is expired</p>
+                        {% else %}
+                            {% if current_user.has_taken_action(invite) %}
+                                {% if invite.accepted %}
+                                    <p>You have accepted this invitation</p>
+                                {% elif invite.rejected %}
+                                    <p>You have rejected this invitation.</p>
+                                {% endif %}
+                            {% else %}
+                                <button class="action"><a href="{{ url_for('action', invite_id=invite.id, action='accept') }}">Accept</a></button>
+                                <button class="action"><a href="{{ url_for('action', invite_id=invite.id, action='reject') }}">Reject</a></button>
+                            {% endif %}
+                        {% endif %}
                     </center>
                 </div>
-                <p id="info" style="display: none;"></p>
+                <p id="info" style="display: none;"></p></center>
             </div>
         {% endfor %}
     </div>
@@ -99,7 +108,13 @@
         {% for notification in notification_received %}
         <center>
             <div class="grid-item3">
-                {{ notification.message }}
+                {{ notification.message }} <br>
+                {% if notification.type == "userResponse" %}
+                        <form action="{{ url_for('action', invite_id=notification.senderId, action='authorResponse') }}" method="post">
+                            <textarea name="authorResponse" id="" placeholder="Reply him/her." cols="30" rows="6"></textarea><br>
+                            <input type="submit" value="Reply" class="action" style="color: white;">
+                        </form>
+                {% endif %}
             </div>
         </center>
         {% endfor %}
