@@ -1,3 +1,17 @@
+Make sure you have python installed in your computer. 
+
+clone this repo.
+
+Then open cmd and pip install -r requirements.txt
+
+Then in cmd type set FLASK_APP=path to run.py
+
+Initialise database by "flask db init" in cmd
+
+type flask run and you are ready to go.
+
+open http://localhost:5000/register
+
 Subhash just got appointed as the chairman of Festember. He's really happy and wants to celebrate. Ram suggests to organise a booze party at his place. But being a chairman of such a big event, Subhash has too many friends to invite. Help subhash to develop a web application to do the invite job for him.
 
 Normal mode:
