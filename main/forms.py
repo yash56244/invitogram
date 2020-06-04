@@ -4,6 +4,7 @@ from wtforms.fields.html5 import DateField, TimeField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError, Email
 from main.models import User
 from flask_login import current_user
+from datetime import date, datetime
 
 class LoginForm(FlaskForm):
     email = StringField('E-Mail', validators=[DataRequired(), Email()])
@@ -26,16 +27,17 @@ class RegistrationForm(FlaskForm):
 class BirthdayForm(FlaskForm):
     name = StringField('Name of person', validators=[DataRequired()])
     birthday_no = IntegerField('Which Birthday?', validators=[DataRequired()])
-    date = DateField('Date',format='%Y-%m-%d', validators=[DataRequired()])
+    date1 = DateField('Date',format='%Y-%m-%d', validators=[DataRequired()])
     time = TimeField('Time', format='%H:%M', validators=[DataRequired()])
     host_name = StringField('Host Name', validators=[DataRequired()])
     details = TextAreaField('Details', validators=[DataRequired()])
     submit = SubmitField('Send Invite')
 
+
 class WeddingForm(FlaskForm):
     bride = StringField('Bride\'s Name', validators=[DataRequired()])
     groom = StringField('Groom\'s Name', validators=[DataRequired()])
-    date = DateField('Date',format='%Y-%m-%d', validators=[DataRequired()])
+    date1 = DateField('Date',format='%Y-%m-%d', validators=[DataRequired()])
     time = TimeField('Time', format='%H:%M', validators=[DataRequired()])
     host_name = StringField('Host Name', validators=[DataRequired()])
     details = TextAreaField('Details', validators=[DataRequired()])
@@ -43,7 +45,7 @@ class WeddingForm(FlaskForm):
 
 class OtherForm(FlaskForm):
     event_name = StringField('Name of Event', validators=[DataRequired()])
-    date = DateField('Date',format='%Y-%m-%d', validators=[DataRequired()])
+    date1 = DateField('Date',format='%Y-%m-%d', validators=[DataRequired()])
     time = TimeField('Time', format='%H:%M', validators=[DataRequired()])
     host_name = StringField('Host Name', validators=[DataRequired()])
     details = TextAreaField('Details', validators=[DataRequired()])
@@ -67,9 +69,3 @@ class UpdateAccount(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('That email is taken. Please choose a different one.')
-
-class AcceptForm(FlaskForm):
-    submit = SubmitField('Accept')
-
-class RejectForm(FlaskForm):
-    submit = SubmitField('Reject')
