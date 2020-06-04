@@ -100,3 +100,21 @@
         transform: scale(1.1);
     }
 }
+.action{
+    padding: 5px 10px;
+    font-size: 20px;
+    border: none;
+    outline: none;
+    background-color: green;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.action:hover{
+    transform: scale(1.1);
+    background-color: orange;
+}
+.action a{
+    color: white;
+    text-decoration: none;
+}
