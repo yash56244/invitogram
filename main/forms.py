@@ -28,6 +28,7 @@ class BirthdayForm(FlaskForm):
     name = StringField('Name of person', validators=[DataRequired()])
     birthday_no = IntegerField('Which Birthday?', validators=[DataRequired()])
     date1 = DateField('Date',format='%Y-%m-%d', validators=[DataRequired()])
+    date2 = DateField('Deadline',format='%Y-%m-%d', validators=[DataRequired()])
     time = TimeField('Time', format='%H:%M', validators=[DataRequired()])
     host_name = StringField('Host Name', validators=[DataRequired()])
     details = TextAreaField('Details', validators=[DataRequired()])
@@ -38,6 +39,7 @@ class WeddingForm(FlaskForm):
     bride = StringField('Bride\'s Name', validators=[DataRequired()])
     groom = StringField('Groom\'s Name', validators=[DataRequired()])
     date1 = DateField('Date',format='%Y-%m-%d', validators=[DataRequired()])
+    date2 = DateField('Deadline',format='%Y-%m-%d', validators=[DataRequired()])
     time = TimeField('Time', format='%H:%M', validators=[DataRequired()])
     host_name = StringField('Host Name', validators=[DataRequired()])
     details = TextAreaField('Details', validators=[DataRequired()])
@@ -46,6 +48,7 @@ class WeddingForm(FlaskForm):
 class OtherForm(FlaskForm):
     event_name = StringField('Name of Event', validators=[DataRequired()])
     date1 = DateField('Date',format='%Y-%m-%d', validators=[DataRequired()])
+    date2 = DateField('Deadline',format='%Y-%m-%d', validators=[DataRequired()])
     time = TimeField('Time', format='%H:%M', validators=[DataRequired()])
     host_name = StringField('Host Name', validators=[DataRequired()])
     details = TextAreaField('Details', validators=[DataRequired()])
